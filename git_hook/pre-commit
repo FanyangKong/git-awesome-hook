@@ -1,0 +1,12 @@
+#!/bin/sh
+#
+# An example hook script to verify what is about to be committed.
+# Called by "git commit" with no arguments.  The hook should
+# exit with non-zero status after issuing an appropriate message if
+# it wants to stop the commit.
+#
+
+echo "pre-commit ~"
+# 命令执行路径在项目根目录
+HOOK_PATH=$(git config --local --get core.hooksPath)
+python ${HOOK_PATH}/pre_commit.py

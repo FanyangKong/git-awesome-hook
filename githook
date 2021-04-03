@@ -1,0 +1,25 @@
+#!/bin/sh
+# 切换git hook的脚本路径来源，在git默认路径和git-awesome-hook路径间来回切换
+
+HOOK_ENV=$(git config --local --get core.hooksPath)
+git_awesome_hook_path=~/.git_hook_path
+
+if [[ -f "${git_awesome_hook_path}" ]]; then
+
+    if [[ ${HOOK_ENV} != "" ]]; then
+      git config --local --unset core.hooksPath
+      echo "restore local core.hooksPath to default"
+    else
+        # 获取记录文件的第一行，这里存储着git_hook命令的路径
+        read path < ${git_awesome_hook_path}
+        if [[ -d "${path}" ]]; then
+            STATIC_HOOK_PATH=${path}/git_hook
+            git config --local core.hooksPath ${STATIC_HOOK_PATH}
+            echo "set local core.hooksPath to "${STATIC_HOOK_PATH}
+        else
+            echo "Please rerun install.sh script of project git-awesome-hook"
+        fi
+    fi
+else
+    echo "Please run install.sh script of project git-awesome-hook first"
+fi
